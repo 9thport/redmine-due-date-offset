@@ -1,0 +1,24 @@
+<%= error_messages_for 'due_date_source' %>
+
+<div class="box">
+<!--[form:due_date_source]-->
+<%= hidden_field 'due_date_source', 'type' %>
+<p><label for="due_date_source_name"><%=l(:field_name)%> <span class="required">*</span></label>
+<%= text_field 'due_date_source', 'name'  %></p>
+
+<p><label for="due_date_source_osx_identity_authority"><%=l(:field_osx_identity_authority)%> <span class="required">*</span></label>
+<%= select 'due_date_source', 'osx_identity_authority', collection_for_identity_authority_select %></p>
+
+<p><label for="due_date_source_onthefly_register"><%=l(:field_onthefly)%></label>
+<%= check_box 'due_date_source', 'onthefly_register' %></p>
+</div>
+
+<fieldset class="box"><legend><%=l(:label_options)%></legend>
+<p><label for="due_date_source_prefer_local_email"><%=l(:field_osx_prefer_local_email, :domain => Socket.gethostname.split(".")[1..-1].join(".") )%></label>
+<%= check_box 'due_date_source', 'prefer_local_email'  %></p>
+
+<p><label for="due_date_source_restrict_access"><%=l(:field_osx_restrict_access)%></label>
+<%= check_box 'due_date_source', 'restrict_access' %></p>
+</fieldset>
+<!--[eoform:due_date_source]-->
+
