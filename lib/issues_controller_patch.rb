@@ -56,7 +56,8 @@ module RedmineDueDateByDefault
         def create_with_write_due_date
           
           if params[:issue][:due_date].nil? || (params[:issue][:due_date] == '')
-            if ! params[:issue][:start_date].nil? || (params[:issue][:start_date] == '')
+            if !params[:issue][:start_date] == ""
+            # if ! params[:issue][:start_date].nil? || (params[:issue][:start_date] == "")
               year, month, day = params[:issue][:start_date].split('-')
               new_date = Time.local(year,month,day)
               
