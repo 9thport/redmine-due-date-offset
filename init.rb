@@ -1,5 +1,6 @@
 require 'redmine'
 require 'date'
+require 'active_support'
 
 require File.dirname(__FILE__) + '/lib/issues_controller_patch.rb'
 
