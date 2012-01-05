@@ -25,19 +25,15 @@ module RedmineDueDateByDefault
         # when updating an issues due_date     
         def update_with_write_due_date
           issue = Issue.find(params[:id])
-                    
-          if params[:issue][:due_date].nil? || (params[:issue][:due_date] == '')
-            if ! params[:issue][:start_date].nil? || (params[:issue][:start_date] == '')
-              year, month, day = params[:issue][:start_date].split('-')
-              new_date = Time.local(year,month,day)
-              
-              params[:issue][:due_date] = next_weekday(new_date, 3).strftime("%m/%d/%Y").to_s
-            else
-              params[:issue][:start_date] = Time.now.strftime("%m/%d/Y").to_s
-              params[:issue][:due_date] = next_weekday(Time.now, 3).strftime("%m/%d/%Y").to_s
-            end            
+          
+          if !params[:issue][:start_date] == ""          
+            if params[:issue][:due_date].nil? || (params[:issue][:due_date] == '')
+                year, month, day = params[:issue][:start_date].split('-')
+                new_date = Time.local(year,month,day)              
+                params[:issue][:due_date] = next_weekday(new_date, 3).strftime("%m/%d/%Y").to_s
+            end
           end
-                    
+          
           update_without_write_due_date              
         end
         
