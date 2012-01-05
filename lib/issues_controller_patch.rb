@@ -51,7 +51,11 @@ module RedmineDueDateByDefault
           
           if params[:issue][:due_date].nil? || (params[:issue][:due_date] == '')
             if ! params[:issue][:start_date].nil? || (params[:issue][:start_date] == '')
-              params[:issue][:due_date] = next_weekday(params[:issue][:start_date], 3).strftime("%m/%d/%Y").to_s
+              year, month, day = params[:issue][:start_date].split('-')
+              new_date = Time.local(year,month,day)
+              
+              
+              params[:issue][:due_date] = next_weekday(new_date, 3).strftime("%m/%d/%Y").to_s
             # else
             #   params[:issue][:start_date] = Time.now.strftime("%m/%d/Y").to_s
             #   params[:issue][:due_date] = next_weekday(params[:issue][:start_date], 3).strftime("%m/%d/%Y").to_s
@@ -63,25 +67,24 @@ module RedmineDueDateByDefault
         end
         
         def parsed_date(date)
-          year,month,day = date.to_s.split("-")
-          
-          org_date = Time.new(year,month,day,00,00,00, "-08:00")
-          return org_date
+          year,month,day = date.split("-")
+          Time.local(year,month,day,00,00,00)
+          # Time.new(year,month,day,00,00,00, "-08:00")
         end
         
         def next_weekday(original_date, step=1)    
-          result = parsed_date(original_date)
+          result = original_date
           counter = 0
 
           until counter == step
             result += 1.day
             counter += 1
 
-            if result.saturday?
+            if result.wday == 6
               result += 1.day
             end
 
-            if result.sunday?
+            if result.wday == 0
               result += 1.day
             end
           end
