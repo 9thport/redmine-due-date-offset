@@ -40,28 +40,22 @@ module RedmineDueDateByDefault
         # when making a new issue (this is also used when changing trackers)
         def new_with_write_fixed_version
           project = Project.find(params[:project_id]) 
-          field = project.custom_field_values.find {|field| field.custom_field_id == 21}
-          if !field.nil?
-            params[:issue] = {} if params[:issue].nil?
-            build_new_issue_from_params
-          end
+          build_new_issue_from_params
+          params[:issue]
           new_without_write_fixed_version
         end
 
         # when creating a new issue and setting a due date
         def create_with_write_due_date
           
+          if params[:issue][:start_date].nil? || (params[:issue][:start_date] == '')
+            params[:issue][:start_date] = Time.now.strftime("%Y-%m-%d")
+          end
+
           if params[:issue][:due_date].nil? || (params[:issue][:due_date] == '')
-            if !params[:issue][:start_date] == ""
-            # if ! params[:issue][:start_date].nil? || (params[:issue][:start_date] == "")
               year, month, day = params[:issue][:start_date].split('-')
               new_date = Time.local(year,month,day)
-              
-              params[:issue][:due_date] = next_weekday(new_date, 3).strftime("%m/%d/%Y").to_s
-            # else
-            #   params[:issue][:start_date] = Time.now.strftime("%m/%d/Y").to_s
-            #   params[:issue][:due_date] = next_weekday(params[:issue][:start_date], 3).strftime("%m/%d/%Y").to_s
-            end            
+              params[:issue][:due_date] = next_weekday(new_date, 3).strftime("%Y-%m-%d").to_s
           end
 
           build_new_issue_from_params
